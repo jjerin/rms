@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -153,6 +154,7 @@ public class OrderServlet extends HttpServlet {
     	
         int id = Integer.parseInt(idStr);
         Order existingOrder = orderDAO.selectOrder(id);
+        populateDisplayFields(existingOrder);
         RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/order-view-form.jsp");
         List<EmployeeSelect> employeeSelectList = SelectUtils.getEmployeeSelectList();
         request.setAttribute("employeeSelectList", employeeSelectList);
@@ -309,6 +311,7 @@ public class OrderServlet extends HttpServlet {
     	List<CustomerSelect> customerSelectList = SelectUtils.getCustomerSelectList();
     	List<EmployeeSelect> employeeSelectList = SelectUtils.getEmployeeSelectList();
     	List<DeliveryPersonSelect> deliveryPersonSelectList = SelectUtils.getDeliveryPersonSelectList();
+    	Map<Integer, String> deliveryAddressMap = SelectUtils.getDeliveryAddressMap();
     	
     	for(Order order: orderList) {
     		
@@ -334,9 +337,43 @@ public class OrderServlet extends HttpServlet {
     			}
     		}
     		
+    		order.setDeliveryAddressDisplay(deliveryAddressMap.get(order.getDeliveryAddressID()));
+    		
+    		
     	}
+    }
+    
+    
+    public void populateDisplayFields(Order order) {
     	
+    	List<CustomerSelect> customerSelectList = SelectUtils.getCustomerSelectList();
+    	List<EmployeeSelect> employeeSelectList = SelectUtils.getEmployeeSelectList();
+    	List<DeliveryPersonSelect> deliveryPersonSelectList = SelectUtils.getDeliveryPersonSelectList();
+    	Map<Integer, String> deliveryAddressMap = SelectUtils.getDeliveryAddressMap();
     	
-    	
+    		
+		int customerId = order.getCustomerID();
+		
+		for(CustomerSelect cs: customerSelectList) {
+			if(customerId == cs.getCustomerId()) {
+				order.setCustomerDisplay(cs.getCustomerDisplayName());
+			}
+		}
+		
+		int employeeId = order.getEmployeeID();
+		for(EmployeeSelect cs: employeeSelectList) {
+			if(employeeId == cs.getEmployeeId()) {
+				order.setEmployeeDisplay(cs.getEmployeeDisplayName());
+			}
+		}
+		
+		int deliveryPersonId = order.getDeliveryPersonID();
+		for(DeliveryPersonSelect cs: deliveryPersonSelectList) {
+			if(deliveryPersonId == cs.getDeliveryPersonId()) {
+				order.setDeliveryPersonDisplay(cs.getDeliveryPersonDisplayName());
+			}
+		}
+		
+		order.setDeliveryAddressDisplay(deliveryAddressMap.get(order.getDeliveryAddressID()));
     }
 }

@@ -115,7 +115,7 @@
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>Delivery Address ID</label> <input readonly type="text" value="<c:out value='${order.deliveryAddressID}' />" class="form-control" name="deliveryAddressID">
+                            <label>Delivery Address</label> <input readonly type="text" value="<c:out value='${order.deliveryAddressDisplay}' />" class="form-control" name="deliveryAddressID">
                         </fieldset>
 
                         <fieldset class="form-group">

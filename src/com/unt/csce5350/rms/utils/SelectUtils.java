@@ -1,14 +1,18 @@
 package com.unt.csce5350.rms.utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.unt.csce5350.rms.dao.CustomerDAO;
+import com.unt.csce5350.rms.dao.DeliveryAddressDAO;
 import com.unt.csce5350.rms.dao.DeliveryAreaDAO;
 import com.unt.csce5350.rms.dao.DeliveryPersonDAO;
 import com.unt.csce5350.rms.dao.EmployeeDAO;
 import com.unt.csce5350.rms.dao.MenuDAO;
 import com.unt.csce5350.rms.dao.OrderDeliveryDAO;
+import com.unt.csce5350.rms.updated.model.Deliveryaddress;
 import com.unt.csce5350.rms.updated.model.Deliveryarea;
 import com.unt.csce5350.rms.updated.select.CustomerSelect;
 import com.unt.csce5350.rms.updated.select.DeliveryAreaSelect;
@@ -108,6 +112,22 @@ public class SelectUtils {
     	}
 
     	return deliveryAreaSelectList;
+    }
+    
+    
+    public static Map<Integer, String> getDeliveryAddressMap() {
+    	
+    	DeliveryAddressDAO deliveryAddressDAO = new DeliveryAddressDAO();
+    	List<Deliveryaddress> deliveryAddressList = deliveryAddressDAO.selectAllDeliveryAddresss();
+    	
+    	Map<Integer, String> deliveryAddressMap = new HashMap<>();
+    	
+    	for(Deliveryaddress deliveryAddress: deliveryAddressList) {
+    		String deliveryAddressString = deliveryAddress.getDeliveryAddressStreet1()+"\n "+deliveryAddress.getDeliveryAddressCity()+"\n "+deliveryAddress.getDeliveryAddressState();
+    		deliveryAddressMap.put(deliveryAddress.getDeliveryAddressID(), deliveryAddressString);
+    	}
+    	
+    	return deliveryAddressMap;
     }
     
     

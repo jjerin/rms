@@ -63,7 +63,7 @@
                                         <c:out value="${order.orderTotalCost}" />
                                     </td>
                                     <td>
-                                        <c:out value="${order.deliveryAddressID}" />
+                                        <c:out value="${order.deliveryAddressDisplay}" />
                                     </td>
                                    <%--  <td>
                                         <c:out value="${order.orderDateTime}" />
