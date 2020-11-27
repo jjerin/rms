@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.unt.csce5350.rms.dao.DeliveryAreaDAO;
-import com.unt.csce5350.rms.model.DeliveryArea;
+import com.unt.csce5350.rms.updated.model.Deliveryarea;
 
 
 @WebServlet("/deliveryAreas")
@@ -67,7 +67,7 @@ public class DeliveryAreaServlet extends HttpServlet {
 
     private void listDeliveryArea(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException, ServletException {
-        List < DeliveryArea > listDeliveryArea = deliveryAreaDAO.selectAllDeliveryAreas();
+        List < Deliveryarea > listDeliveryArea = deliveryAreaDAO.selectAllDeliveryAreas();
         request.setAttribute("listDeliveryArea", listDeliveryArea);
         RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/deliveryArea-list.jsp");
         dispatcher.forward(request, response);
@@ -82,7 +82,7 @@ public class DeliveryAreaServlet extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        DeliveryArea existingDeliveryArea = deliveryAreaDAO.selectDeliveryArea(id);
+        Deliveryarea existingDeliveryArea = deliveryAreaDAO.selectDeliveryArea(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/deliveryArea-form.jsp");
         request.setAttribute("deliveryArea", existingDeliveryArea);
         dispatcher.forward(request, response);
@@ -91,10 +91,9 @@ public class DeliveryAreaServlet extends HttpServlet {
 
     private void insertDeliveryArea(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-        DeliveryArea newDeliveryArea = new DeliveryArea(name, email, country);
+        String deliveryAreaName = request.getParameter("deliveryAreaName");
+        int deliveryAreaZip = Integer.parseInt(request.getParameter("deliveryAreaZip"));
+        Deliveryarea newDeliveryArea = new Deliveryarea(deliveryAreaName, deliveryAreaZip);
         deliveryAreaDAO.insertDeliveryArea(newDeliveryArea);
         response.sendRedirect("deliveryAreas?action=list");
     }
@@ -102,11 +101,10 @@ public class DeliveryAreaServlet extends HttpServlet {
     private void updateDeliveryArea(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
+        String deliveryAreaName = request.getParameter("deliveryAreaName");
+        int deliveryAreaZip = Integer.parseInt(request.getParameter("deliveryAreaZip"));
 
-        DeliveryArea book = new DeliveryArea(id, name, email, country);
+        Deliveryarea book = new Deliveryarea(id, deliveryAreaName, deliveryAreaZip);
         deliveryAreaDAO.updateDeliveryArea(book);
         response.sendRedirect("deliveryAreas?action=list");
     }

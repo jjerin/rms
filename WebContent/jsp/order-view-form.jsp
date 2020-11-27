@@ -15,7 +15,10 @@
             <br>
             <div class="container col-md-4">
                 <div class="card">
+                
                     <div class="card-body">
+                                               <div style="float: right;"><button class="btn btn-success" onclick="window.print()">Print Order</button></div>
+                    
                         <c:if test="${order != null}">
                             <form action="orders?action=update" method="post">
                         </c:if>
@@ -26,12 +29,14 @@
                         <caption>
                             <h2>
                                 <c:if test="${order != null}">
-                                    Edit Order
+                                    View Order
                                 </c:if>
                                 <c:if test="${order == null}">
                                     Add New Order
                                 </c:if>
+                                
                             </h2>
+                            
                         </caption>
 
                         <c:if test="${order != null}">
@@ -41,7 +46,7 @@
                         <fieldset class="form-group">
                             <%-- <label>Employee ID</label> <input type="text" value="<c:out value='${order.employeeID}' />" class="form-control" name="employeeID" required="required"> --%>
                             <label >Employee</label>
-							<select name="employeeID" class="form-control">
+							<select disabled="true" name="employeeID" class="form-control">
 								<c:forEach items="${employeeSelectList}" var="employee">
 									<option value="${employee.employeeId}"
 										<c:if test="${employee.employeeId eq order.employeeID}">selected="selected"</c:if>
@@ -52,10 +57,12 @@
 							</select>
 						</fieldset>
 
-
                         <%-- <fieldset class="form-group">
+                            <label>Delivery Person ID</label> <input type="text" value="<c:out value='${order.deliveryPersonID}' />" class="form-control" name="deliveryPersonID">
+                        </fieldset> --%>
+                        <fieldset class="form-group">
                          	<label>DeliveryPerson</label>
-							<select name="deliveryPersonID" class="form-control">
+							<select disabled="true" name="deliveryPersonID" class="form-control">
 								<c:forEach items="${deliveryPersonSelectList}" var="deliveryPerson">
 									<option value="${deliveryPerson.deliveryPersonId}"
 										<c:if test="${deliveryPerson.deliveryPersonId eq order.deliveryPersonID}">selected="selected"</c:if>
@@ -64,14 +71,16 @@
 									</option>
 								</c:forEach>
 							</select>
-						</fieldset> --%>
+						</fieldset>
                         
 
-
+                        <%-- <fieldset class="form-group">
+                            <label>Customer ID</label> <input type="text" value="<c:out value='${order.customerID}' />" class="form-control" name="customerID">
+                        </fieldset> --%>
                         <fieldset class="form-group">
                             <%-- <label>Employee ID</label> <input type="text" value="<c:out value='${order.employeeID}' />" class="form-control" name="employeeID" required="required"> --%>
                             <label>Customer</label>
-							<select name="customerID" class="form-control">
+							<select  disabled="true" name="customerID" class="form-control">
 								<c:forEach items="${customerSelectList}" var="customer">
 									<option value="${customer.customerId}"
 										<c:if test="${customer.customerId eq order.customerID}">selected="selected"</c:if>
@@ -90,7 +99,7 @@
                         
 						<fieldset class="form-group">
                          	<label>OrderType</label>
-							<select name="orderType" class="form-control">
+							<select  disabled="true" name="orderType" class="form-control">
 								<c:forEach items="${orderTypeSelectList}" var="orderType">
 									<option value="${orderType.orderTypeId}"
 										<c:if test="${orderType.orderTypeId eq order.orderType}">selected="selected"</c:if>
@@ -101,16 +110,16 @@
 							</select>
 						</fieldset>
 
-                        <%-- <fieldset class="form-group">
-                            <label>Order Total Cost</label> <input type="text" value="<c:out value='${order.orderTotalCost}' />" class="form-control" name="orderTotalCost">
-                        </fieldset> --%>
-
-                        <%-- <fieldset class="form-group">
-                            <label>Delivery Address ID</label> <input type="text" value="<c:out value='${order.deliveryAddressID}' />" class="form-control" name="deliveryAddressID">
-                        </fieldset> --%>
+                        <fieldset class="form-group">
+                            <label>Order Total Cost</label> <input  readonly type="text" value="<c:out value='${order.orderTotalCost}' />" class="form-control" name="orderTotalCost">
+                        </fieldset>
 
                         <fieldset class="form-group">
-                            <label>Order Date Time</label> <input type="text" value="<c:out value='${order.orderDateTime}' />" class="form-control" name="orderDateTime">
+                            <label>Delivery Address ID</label> <input readonly type="text" value="<c:out value='${order.deliveryAddressID}' />" class="form-control" name="deliveryAddressID">
+                        </fieldset>
+
+                        <fieldset class="form-group">
+                            <label>Order Date Time</label> <input readonly type="text" value="<c:out value='${order.orderDateTime}' />" class="form-control" name="orderDateTime">
                         </fieldset>
                         
                         <br/>
@@ -120,8 +129,8 @@
                         	<tr>
                         		<th>Menu Item ID</th>
                         		<th>Menu Item Quantity</th>
-                        		<!-- <th>Price</th> -->
-                        		<th colspan=2>Comments</th>
+                        		<th>Price</th>
+                        		<th>Comments</th>
                         	</tr>
                         	<tr>
                         		<td>
@@ -129,7 +138,7 @@
 			                            <input type="text" value="<c:out value='${order.orderDetailList[0].menuItemId}' />" class="form-control" name="od0_menuItemId">
 			                        </fieldset> --%>
 									<fieldset class="form-group">
-										<select name="od0_menuItemId" class="form-control">
+										<select  disabled="true"  name="od0_menuItemId" class="form-control">
 											<c:forEach items="${menuItemSelectList}" var="menuItem">
 												<option value="${menuItem.menuItemId}"
 													<c:if test="${menuItem.menuItemId eq order.orderDetailList[0].menuItemId}">selected="selected"</c:if>>
@@ -140,17 +149,17 @@
 								</td>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[0].menuItemQuantity}' />" class="form-control" name="od0_menuItemQuantity">
+			                            <input readonly type="text" value="<c:out value='${order.orderDetailList[0].menuItemQuantity}' />" class="form-control" name="od0_menuItemQuantity">
 			                        </fieldset>
 		                        </td>
-		                        <%-- <td>
+		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[0].orderDetailPrice}' />" class="form-control" name="od0_orderDetailPrice">
+			                            <input readonly type="text" value="<c:out value='${order.orderDetailList[0].orderDetailPrice}' />" class="form-control" name="od0_orderDetailPrice">
 			                        </fieldset>
-		                        </td> --%>
-		                        <td >
+		                        </td>
+		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[0].orderDetailsComments}' />" class="form-control" name="od0_orderDetailsComments">
+			                            <input readonly type="text" value="<c:out value='${order.orderDetailList[0].orderDetailsComments}' />" class="form-control" name="od0_orderDetailsComments">
 			                        </fieldset>
 			                        			
                         		</td>
@@ -163,7 +172,7 @@
 			                            <input type="text" value="<c:out value='${order.orderDetailList[1].menuItemId}' />" class="form-control" name="od1_menuItemId">
 			                        </fieldset> --%>
 			                        <fieldset class="form-group">
-										<select name="od1_menuItemId" class="form-control">
+										<select  disabled="true" name="od1_menuItemId" class="form-control">
 											<c:forEach items="${menuItemSelectList}" var="menuItem">
 												<option value="${menuItem.menuItemId}"
 													<c:if test="${menuItem.menuItemId eq order.orderDetailList[1].menuItemId}">selected="selected"</c:if>>
@@ -175,17 +184,17 @@
 		                        </td>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[1].menuItemQuantity}' />" class="form-control" name="od1_menuItemQuantity">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[1].menuItemQuantity}' />" class="form-control" name="od1_menuItemQuantity">
 			                        </fieldset>
 		                        </td>
-		                       <%--  <td>
-                        			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[1].orderDetailPrice}' />" class="form-control" name="od1_orderDetailPrice">
-			                        </fieldset>
-		                        </td> --%>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[1].orderDetailsComments}' />" class="form-control" name="od1_orderDetailsComments">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[1].orderDetailPrice}' />" class="form-control" name="od1_orderDetailPrice">
+			                        </fieldset>
+		                        </td>
+		                        <td>
+                        			<fieldset class="form-group">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[1].orderDetailsComments}' />" class="form-control" name="od1_orderDetailsComments">
 			                        </fieldset>
 			                        			
                         		</td>
@@ -198,7 +207,7 @@
 			                            <input type="text" value="<c:out value='${order.orderDetailList[2].menuItemId}' />" class="form-control" name="od2_menuItemId">
 			                        </fieldset> --%>
 									<fieldset class="form-group">
-										<select name="od2_menuItemId" class="form-control">
+										<select  disabled="true" name="od2_menuItemId" class="form-control">
 											<c:forEach items="${menuItemSelectList}" var="menuItem">
 												<option value="${menuItem.menuItemId}"
 													<c:if test="${menuItem.menuItemId eq order.orderDetailList[2].menuItemId}">selected="selected"</c:if>>
@@ -210,17 +219,17 @@
 		                        </td>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[2].menuItemQuantity}' />" class="form-control" name="od2_menuItemQuantity">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[2].menuItemQuantity}' />" class="form-control" name="od2_menuItemQuantity">
 			                        </fieldset>
 		                        </td>
-		                        <%-- <td>
-                        			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[2].orderDetailPrice}' />" class="form-control" name="od2_orderDetailPrice">
-			                        </fieldset>
-		                        </td> --%>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[2].orderDetailsComments}' />" class="form-control" name="od2_orderDetailsComments">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[2].orderDetailPrice}' />" class="form-control" name="od2_orderDetailPrice">
+			                        </fieldset>
+		                        </td>
+		                        <td>
+                        			<fieldset class="form-group">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[2].orderDetailsComments}' />" class="form-control" name="od2_orderDetailsComments">
 			                        </fieldset>
 			                        			
                         		</td>
@@ -234,7 +243,7 @@
 			                            <input type="text" value="<c:out value='${order.orderDetailList[3].menuItemId}' />" class="form-control" name="od3_menuItemId">
 			                        </fieldset> --%>
 									<fieldset class="form-group">
-										<select name="od3_menuItemId" class="form-control">
+										<select  disabled="true" name="od3_menuItemId" class="form-control">
 											<c:forEach items="${menuItemSelectList}" var="menuItem">
 												<option value="${menuItem.menuItemId}"
 													<c:if test="${menuItem.menuItemId eq order.orderDetailList[3].menuItemId}">selected="selected"</c:if>>
@@ -246,17 +255,17 @@
 		                        </td>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[3].menuItemQuantity}' />" class="form-control" name="od3_menuItemQuantity">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[3].menuItemQuantity}' />" class="form-control" name="od3_menuItemQuantity">
 			                        </fieldset>
 		                        </td>
-		                        <%-- <td>
-                        			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[3].orderDetailPrice}' />" class="form-control" name="od3_orderDetailPrice">
-			                        </fieldset>
-		                        </td> --%>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[3].orderDetailsComments}' />" class="form-control" name="od3_orderDetailsComments">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[3].orderDetailPrice}' />" class="form-control" name="od3_orderDetailPrice">
+			                        </fieldset>
+		                        </td>
+		                        <td>
+                        			<fieldset class="form-group">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[3].orderDetailsComments}' />" class="form-control" name="od3_orderDetailsComments">
 			                        </fieldset>
 			                        			
                         		</td>
@@ -268,7 +277,7 @@
 			                            <input type="text" value="<c:out value='${order.orderDetailList[4].menuItemId}' />" class="form-control" name="od4_menuItemId">
 			                        </fieldset> --%>
 									<fieldset class="form-group">
-										<select name="od4_menuItemId" class="form-control">
+										<select  disabled="true" name="od4_menuItemId" class="form-control">
 											<c:forEach items="${menuItemSelectList}" var="menuItem">
 												<option value="${menuItem.menuItemId}"
 													<c:if test="${menuItem.menuItemId eq order.orderDetailList[4].menuItemId}">selected="selected"</c:if>>
@@ -280,17 +289,17 @@
 		                        </td>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[4].menuItemQuantity}' />" class="form-control" name="od4_menuItemQuantity">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[4].menuItemQuantity}' />" class="form-control" name="od4_menuItemQuantity">
 			                        </fieldset>
 		                        </td>
-		                        <%-- <td>
-                        			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[4].orderDetailPrice}' />" class="form-control" name="od4_orderDetailPrice">
-			                        </fieldset>
-		                        </td> --%>
 		                        <td>
                         			<fieldset class="form-group">
-			                            <input type="text" value="<c:out value='${order.orderDetailList[4].orderDetailsComments}' />" class="form-control" name="od4_orderDetailsComments">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[4].orderDetailPrice}' />" class="form-control" name="od4_orderDetailPrice">
+			                        </fieldset>
+		                        </td>
+		                        <td>
+                        			<fieldset class="form-group">
+			                            <input type="text" readonly value="<c:out value='${order.orderDetailList[4].orderDetailsComments}' />" class="form-control" name="od4_orderDetailsComments">
 			                        </fieldset>
 			                        			
                         		</td>
@@ -300,9 +309,18 @@
                         
                         </table>
 
-                        <button type="submit" class="btn btn-success">Save</button>
-
-                        </form>
+		                <!-- <button type="submit" class="btn btn-success">Save</button> -->
+		
+						<table>
+							<tr>
+								<td><a href="payments?action=orderPayment&orderID=<c:out value='${order.orderID}' />">Process Payment</a> &nbsp;&nbsp;&nbsp;&nbsp;
+								</td>
+								<td><a
+									href="delivery?action=edit&id=<c:out value='${order.orderID}' />">Setup Delivery</a>&nbsp;&nbsp;&nbsp;&nbsp;
+								</td>
+							</tr>
+						</table>
+						</form>
                     </div>
                 </div>
             </div>

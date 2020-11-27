@@ -1,6 +1,7 @@
 package com.unt.csce5350.rms.servlet;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.unt.csce5350.rms.dao.MenuDAO;
-import com.unt.csce5350.rms.model.Menu;
+import com.unt.csce5350.rms.updated.model.Menuitem;
 
 
 @WebServlet("/menus")
@@ -67,7 +68,7 @@ public class MenuServlet extends HttpServlet {
 
     private void listMenu(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException, ServletException {
-        List < Menu > listMenu = menuDAO.selectAllMenus();
+        List < Menuitem > listMenu = menuDAO.selectAllMenus();
         request.setAttribute("listMenu", listMenu);
         RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/menu-list.jsp");
         dispatcher.forward(request, response);
@@ -82,7 +83,7 @@ public class MenuServlet extends HttpServlet {
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Menu existingMenu = menuDAO.selectMenu(id);
+        Menuitem existingMenu = menuDAO.selectMenu(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/menu-form.jsp");
         request.setAttribute("menu", existingMenu);
         dispatcher.forward(request, response);
@@ -91,10 +92,12 @@ public class MenuServlet extends HttpServlet {
 
     private void insertMenu(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-        Menu newMenu = new Menu(name, email, country);
+        String menuItemName = request.getParameter("menuItemName");
+        String menuItemDescription = request.getParameter("menuItemDescription");
+        String menuItemType = request.getParameter("menuItemType");
+        BigDecimal menuItemPrice = new BigDecimal(request.getParameter("menuItemPrice"));
+
+        Menuitem newMenu = new Menuitem(menuItemDescription, menuItemName, menuItemPrice, menuItemType);
         menuDAO.insertMenu(newMenu);
         response.sendRedirect("menus?action=list");
     }
@@ -102,11 +105,13 @@ public class MenuServlet extends HttpServlet {
     private void updateMenu(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
+        String menuItemName = request.getParameter("menuItemName");
+        String menuItemDescription = request.getParameter("menuItemDescription");
+        String menuItemType = request.getParameter("menuItemType");
+        BigDecimal menuItemPrice = new BigDecimal(request.getParameter("menuItemPrice"));
 
-        Menu book = new Menu(id, name, email, country);
+        
+        Menuitem book = new Menuitem(id, menuItemDescription, menuItemName, menuItemPrice, menuItemType);
         menuDAO.updateMenu(book);
         response.sendRedirect("menus?action=list");
     }

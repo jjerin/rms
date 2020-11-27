@@ -1,14 +1,15 @@
 package com.unt.csce5350.rms.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.unt.csce5350.rms.model.Employee;
+import com.unt.csce5350.rms.updated.model.Employee;
+import com.unt.csce5350.rms.updated.select.EmployeeSelect;
+import com.unt.csce5350.rms.utils.DBConnectionUtil;
 
 
 /**
@@ -19,54 +20,64 @@ import com.unt.csce5350.rms.model.Employee;
  *
  */
 public class EmployeeDAO {
-    private String jdbcURL = "jdbc:mysql://localhost:3306/jerin?useSSL=false&allowPublicKeyRetrieval=true";
-    private String jdbcUserName = "root";
-    private String jdbcPassword = "jerin";
+    private static final String INSERT_EMPLOYEES_SQL = "INSERT INTO employee" + "  (EmployeeFirstName, EmployeeLastName, EmployeeStreet1, EmployeeStreet2, EmployeeCity, EmployeeState, EmployeeZip, EmployeePhone) VALUES " +
+        " (?, ?, ?, ?, ?, ?, ?, ?);";
 
-    private static final String INSERT_EMPLOYEES_SQL = "INSERT INTO employees" + "  (name, email, country) VALUES " +
-        " (?, ?, ?);";
-
-    private static final String SELECT_EMPLOYEE_BY_ID = "select id,name,email,country from employees where id =?";
-    private static final String SELECT_ALL_EMPLOYEES = "select * from employees";
-    private static final String DELETE_EMPLOYEES_SQL = "delete from employees where id = ?;";
-    private static final String UPDATE_EMPLOYEES_SQL = "update employees set name = ?,email= ?, country =? where id = ?;";
+    private static final String SELECT_EMPLOYEE_BY_ID = "select EmployeeID, EmployeeFirstName, EmployeeLastName, EmployeeStreet1, EmployeeStreet2, EmployeeCity, EmployeeState, EmployeeZip, EmployeePhone  from employee where EmployeeID =?";
+    private static final String SELECT_ALL_EMPLOYEES = "select * from employee";
+    private static final String DELETE_EMPLOYEES_SQL = "delete from employee where EmployeeID = ?;";
+    private static final String UPDATE_EMPLOYEES_SQL = "update employee set EmployeeFirstName = ?, EmployeeLastName = ?, EmployeeStreet1 = ?, EmployeeStreet2 = ?, EmployeeCity = ?, EmployeeState = ?, EmployeeZip = ?, EmployeePhone = ? where EmployeeID = ?;";
+    private static final String SELECT_EMPLOYEE_NAME_LIST = "select EmployeeID, EmployeeFirstName, EmployeeLastName from employee";
 
     public EmployeeDAO() {}
+    
+    public List<EmployeeSelect> selectEmployeesNameList() {
 
-    protected Connection getConnection() {
-        Connection connection = null;
-        try {
-            //Class.forName("com.mysql.jdbc.Driver");
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(jdbcURL, jdbcUserName, jdbcPassword);
+    	List<EmployeeSelect> employeeSelectList = new ArrayList<>();
+    	employeeSelectList.add(new EmployeeSelect());
+       try (Connection connection = DBConnectionUtil.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMPLOYEE_NAME_LIST);) {
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+
+            while (rs.next()) {
+                int id = rs.getInt("EmployeeID");
+            	String employeeFirstName        = rs.getString("EmployeeFirstName");
+            	String employeeLastName         = rs.getString("EmployeeLastName");
+
+            	employeeSelectList.add(new EmployeeSelect(id, employeeFirstName+" "+employeeLastName));
+            }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	DBConnectionUtil.printSQLException(e);
         }
-        return connection;
+        return employeeSelectList;
     }
 
     public void insertEmployee(Employee employee) throws SQLException {
         System.out.println(INSERT_EMPLOYEES_SQL);
         // try-with-resource statement will auto close the connection.
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLOYEES_SQL)) {
-            preparedStatement.setString(1, employee.getName());
-            preparedStatement.setString(2, employee.getEmail());
-            preparedStatement.setString(3, employee.getCountry());
+        try (Connection connection = DBConnectionUtil.getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_EMPLOYEES_SQL)) {
+            preparedStatement.setString(1, employee.getEmployeeFirstName());
+            preparedStatement.setString(2, employee.getEmployeeLastName());
+            preparedStatement.setString(3, employee.getEmployeeStreet1());
+            preparedStatement.setString(4, employee.getEmployeeStreet2());
+            preparedStatement.setString(5, employee.getEmployeeCity());
+            preparedStatement.setString(6, employee.getEmployeeState());
+            preparedStatement.setString(7, employee.getEmployeeZip());
+            preparedStatement.setString(8, employee.getEmployeePhone());
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            printSQLException(e);
+        	DBConnectionUtil.printSQLException(e);
         }
     }
 
     public Employee selectEmployee(int id) {
         Employee employee = null;
         // Step 1: Establishing a Connection
-        try (Connection connection = getConnection();
+        try (Connection connection = DBConnectionUtil.getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EMPLOYEE_BY_ID);) {
             preparedStatement.setInt(1, id);
@@ -76,13 +87,21 @@ public class EmployeeDAO {
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String country = rs.getString("country");
-                employee = new Employee(id, name, email, country);
+            	String employeeFirstName        = rs.getString("EmployeeFirstName");
+            	String employeeLastName         = rs.getString("EmployeeLastName");
+            	String employeeStreet1          = rs.getString("EmployeeStreet1");
+            	String employeeStreet2          = rs.getString("EmployeeStreet2");
+            	String employeeCity             = rs.getString("EmployeeCity");
+            	String employeeState            = rs.getString("EmployeeState");
+            	String employeeZip              = rs.getString("EmployeeZip");
+            	String employeePhone            = rs.getString("EmployeePhone");
+            	
+            	employee = new Employee(id, employeeCity, employeeFirstName, employeeLastName,
+            			employeePhone, employeeState, employeeStreet1, employeeStreet2, employeeZip);
+            			
             }
         } catch (SQLException e) {
-            printSQLException(e);
+        	DBConnectionUtil.printSQLException(e);
         }
         return employee;
     }
@@ -92,7 +111,7 @@ public class EmployeeDAO {
         // using try-with-resources to avoid closing resources (boiler plate code)
         List < Employee > employees = new ArrayList < > ();
         // Step 1: Establishing a Connection
-        try (Connection connection = getConnection();
+        try (Connection connection = DBConnectionUtil.getConnection();
 
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_EMPLOYEES);) {
@@ -102,21 +121,28 @@ public class EmployeeDAO {
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String country = rs.getString("country");
-                employees.add(new Employee(id, name, email, country));
+                int id = rs.getInt("EmployeeID");
+            	String employeeFirstName        = rs.getString("EmployeeFirstName");
+            	String employeeLastName         = rs.getString("EmployeeLastName");
+            	String employeeStreet1          = rs.getString("EmployeeStreet1");
+            	String employeeStreet2          = rs.getString("EmployeeStreet2");
+            	String employeeCity             = rs.getString("EmployeeCity");
+            	String employeeState            = rs.getString("EmployeeState");
+            	String employeeZip              = rs.getString("EmployeeZip");
+            	String employeePhone            = rs.getString("EmployeePhone");
+                employees.add(new Employee(id, employeeCity, employeeFirstName, employeeLastName,
+            			employeePhone, employeeState, employeeStreet1, employeeStreet2, employeeZip));
             }
         } catch (SQLException e) {
-            printSQLException(e);
+        	DBConnectionUtil.printSQLException(e);
         }
         return employees;
     }
 
     public boolean deleteEmployee(int id) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_EMPLOYEES_SQL);) {
+        try (Connection connection = DBConnectionUtil.getConnection(); 
+        		PreparedStatement statement = connection.prepareStatement(DELETE_EMPLOYEES_SQL);) {
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
         }
@@ -125,30 +151,22 @@ public class EmployeeDAO {
 
     public boolean updateEmployee(Employee employee) throws SQLException {
         boolean rowUpdated;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(UPDATE_EMPLOYEES_SQL);) {
-            statement.setString(1, employee.getName());
-            statement.setString(2, employee.getEmail());
-            statement.setString(3, employee.getCountry());
-            statement.setInt(4, employee.getId());
+        try (Connection connection = DBConnectionUtil.getConnection(); 
+        		PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_EMPLOYEES_SQL);) {
+            preparedStatement.setString(1, employee.getEmployeeFirstName());
+            preparedStatement.setString(2, employee.getEmployeeLastName());
+            preparedStatement.setString(3, employee.getEmployeeStreet1());
+            preparedStatement.setString(4, employee.getEmployeeStreet2());
+            preparedStatement.setString(5, employee.getEmployeeCity());
+            preparedStatement.setString(6, employee.getEmployeeState());
+            preparedStatement.setString(7, employee.getEmployeeZip());
+            preparedStatement.setString(8, employee.getEmployeePhone());
 
-            rowUpdated = statement.executeUpdate() > 0;
+            preparedStatement.setInt(9, employee.getEmployeeID());
+
+            rowUpdated = preparedStatement.executeUpdate() > 0;
         }
         return rowUpdated;
     }
 
-    private void printSQLException(SQLException ex) {
-        for (Throwable e: ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
-            }
-        }
-    }
 }

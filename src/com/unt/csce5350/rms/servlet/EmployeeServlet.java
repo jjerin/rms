@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.unt.csce5350.rms.dao.EmployeeDAO;
-import com.unt.csce5350.rms.model.Employee;
+import com.unt.csce5350.rms.updated.model.Employee;
 
 
 @WebServlet("/employees")
@@ -91,10 +91,17 @@ public class EmployeeServlet extends HttpServlet {
 
     private void insertEmployee(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-        Employee newEmployee = new Employee(name, email, country);
+    	String employeeFirstName        = request.getParameter("employeeFirstName");
+    	String employeeLastName         = request.getParameter("employeeLastName");
+    	String employeeStreet1          = request.getParameter("employeeStreet1");
+    	String employeeStreet2          = request.getParameter("employeeStreet2");
+    	String employeeCity             = request.getParameter("employeeCity");
+    	String employeeState            = request.getParameter("employeeState");
+    	String employeeZip              = request.getParameter("employeeZip");
+    	String employeePhone            = request.getParameter("employeePhone");
+
+    	Employee newEmployee = new Employee(employeeCity, employeeFirstName, employeeLastName,
+    			employeePhone, employeeState, employeeStreet1, employeeStreet2, employeeZip);
         employeeDAO.insertEmployee(newEmployee);
         response.sendRedirect("employees?action=list");
     }
@@ -102,11 +109,18 @@ public class EmployeeServlet extends HttpServlet {
     private void updateEmployee(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
+ 
+        String employeeFirstName        = request.getParameter("employeeFirstName");
+    	String employeeLastName         = request.getParameter("employeeLastName");
+    	String employeeStreet1          = request.getParameter("employeeStreet1");
+    	String employeeStreet2          = request.getParameter("employeeStreet2");
+    	String employeeCity             = request.getParameter("employeeCity");
+    	String employeeState            = request.getParameter("employeeState");
+    	String employeeZip              = request.getParameter("employeeZip");
+    	String employeePhone            = request.getParameter("employeePhone");
 
-        Employee book = new Employee(id, name, email, country);
+        Employee book = new Employee(id, employeeCity, employeeFirstName, employeeLastName,
+    			employeePhone, employeeState, employeeStreet1, employeeStreet2, employeeZip);
         employeeDAO.updateEmployee(book);
         response.sendRedirect("employees?action=list");
     }

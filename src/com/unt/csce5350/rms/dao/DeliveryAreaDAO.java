@@ -1,14 +1,14 @@
 package com.unt.csce5350.rms.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.unt.csce5350.rms.model.DeliveryArea;
+import com.unt.csce5350.rms.updated.model.Deliveryarea;
+import com.unt.csce5350.rms.utils.DBConnectionUtil;
 
 
 /**
@@ -19,54 +19,35 @@ import com.unt.csce5350.rms.model.DeliveryArea;
  *
  */
 public class DeliveryAreaDAO {
-    private String jdbcURL = "jdbc:mysql://localhost:3306/jerin?useSSL=false&allowPublicKeyRetrieval=true";
-    private String jdbcDeliveryAreaname = "root";
-    private String jdbcPassword = "jerin";
+    private static final String INSERT_DELIVERYAREA_SQL = "INSERT INTO deliveryarea" + "  (DeliveryAreaName, DeliveryAreaZip ) VALUES " +
+        " (?, ?);";
 
-    private static final String INSERT_DELIVERYAREA_SQL = "INSERT INTO deliveryAreas" + "  (name, email, country) VALUES " +
-        " (?, ?, ?);";
-
-    private static final String SELECT_DELIVERYAREA_BY_ID = "select id,name,email,country from deliveryAreas where id =?";
-    private static final String SELECT_ALL_DELIVERYAREA = "select * from deliveryAreas";
-    private static final String DELETE_DELIVERYAREA_SQL = "delete from deliveryAreas where id = ?;";
-    private static final String UPDATE_DELIVERYAREA_SQL = "update deliveryAreas set name = ?,email= ?, country =? where id = ?;";
+    private static final String SELECT_DELIVERYAREA_BY_ID = "select DeliveryAreaID, DeliveryAreaName, DeliveryAreaZip from deliveryarea where DeliveryAreaID =?";
+    private static final String SELECT_ALL_DELIVERYAREA = "select * from deliveryarea";
+    private static final String DELETE_DELIVERYAREA_SQL = "delete from deliveryarea where DeliveryAreaID = ?;";
+    private static final String UPDATE_DELIVERYAREA_SQL = "update deliveryarea set DeliveryAreaName =?, DeliveryAreaZip=? where DeliveryAreaID = ?;";
 
     public DeliveryAreaDAO() {}
 
-    protected Connection getConnection() {
-        Connection connection = null;
-        try {
-            //Class.forName("com.mysql.jdbc.Driver");
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(jdbcURL, jdbcDeliveryAreaname, jdbcPassword);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return connection;
-    }
-
-    public void insertDeliveryArea(DeliveryArea deliveryArea) throws SQLException {
+    public void insertDeliveryArea(Deliveryarea deliveryArea) throws SQLException {
         System.out.println(INSERT_DELIVERYAREA_SQL);
         // try-with-resource statement will auto close the connection.
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_DELIVERYAREA_SQL)) {
-            preparedStatement.setString(1, deliveryArea.getName());
-            preparedStatement.setString(2, deliveryArea.getEmail());
-            preparedStatement.setString(3, deliveryArea.getCountry());
+        try (Connection connection = DBConnectionUtil.getConnection(); 
+        		PreparedStatement preparedStatement = connection.prepareStatement(INSERT_DELIVERYAREA_SQL)) {
+            preparedStatement.setString(1, deliveryArea.getDeliveryAreaName());
+            preparedStatement.setInt(2, deliveryArea.getDeliveryAreaZip());
+
             System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            printSQLException(e);
+        	DBConnectionUtil.printSQLException(e);
         }
     }
 
-    public DeliveryArea selectDeliveryArea(int id) {
-        DeliveryArea deliveryArea = null;
+    public Deliveryarea selectDeliveryArea(int id) {
+        Deliveryarea deliveryArea = null;
         // Step 1: Establishing a Connection
-        try (Connection connection = getConnection();
+        try (Connection connection = DBConnectionUtil.getConnection();
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_DELIVERYAREA_BY_ID);) {
             preparedStatement.setInt(1, id);
@@ -76,23 +57,23 @@ public class DeliveryAreaDAO {
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String country = rs.getString("country");
-                deliveryArea = new DeliveryArea(id, name, email, country);
+                String deliveryAreaName = rs.getString("DeliveryAreaName");
+                int deliveryAreaZip = rs.getInt("DeliveryAreaZip");
+                
+                deliveryArea = new Deliveryarea(id, deliveryAreaName, deliveryAreaZip);
             }
         } catch (SQLException e) {
-            printSQLException(e);
+        	DBConnectionUtil.printSQLException(e);
         }
         return deliveryArea;
     }
 
-    public List < DeliveryArea > selectAllDeliveryAreas() {
+    public List < Deliveryarea > selectAllDeliveryAreas() {
 
         // using try-with-resources to avoid closing resources (boiler plate code)
-        List < DeliveryArea > deliveryAreas = new ArrayList < > ();
+        List < Deliveryarea > deliveryAreas = new ArrayList < > ();
         // Step 1: Establishing a Connection
-        try (Connection connection = getConnection();
+        try (Connection connection = DBConnectionUtil.getConnection();
 
             // Step 2:Create a statement using connection object
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_DELIVERYAREA);) {
@@ -102,53 +83,39 @@ public class DeliveryAreaDAO {
 
             // Step 4: Process the ResultSet object.
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String country = rs.getString("country");
-                deliveryAreas.add(new DeliveryArea(id, name, email, country));
+                int id = rs.getInt("DeliveryAreaID");
+                String deliveryAreaName = rs.getString("DeliveryAreaName");
+                int deliveryAreaZip = rs.getInt("DeliveryAreaZip");
+
+                deliveryAreas.add(new Deliveryarea(id, deliveryAreaName, deliveryAreaZip));
             }
         } catch (SQLException e) {
-            printSQLException(e);
+        	DBConnectionUtil.printSQLException(e);
         }
         return deliveryAreas;
     }
 
     public boolean deleteDeliveryArea(int id) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_DELIVERYAREA_SQL);) {
+        try (Connection connection = DBConnectionUtil.getConnection(); 
+        		PreparedStatement statement = connection.prepareStatement(DELETE_DELIVERYAREA_SQL);) {
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
         }
         return rowDeleted;
     }
 
-    public boolean updateDeliveryArea(DeliveryArea deliveryArea) throws SQLException {
+    public boolean updateDeliveryArea(Deliveryarea deliveryArea) throws SQLException {
         boolean rowUpdated;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(UPDATE_DELIVERYAREA_SQL);) {
-            statement.setString(1, deliveryArea.getName());
-            statement.setString(2, deliveryArea.getEmail());
-            statement.setString(3, deliveryArea.getCountry());
-            statement.setInt(4, deliveryArea.getId());
+        try (Connection connection = DBConnectionUtil.getConnection(); 
+        		PreparedStatement statement = connection.prepareStatement(UPDATE_DELIVERYAREA_SQL);) {
+            statement.setString(1, deliveryArea.getDeliveryAreaName());
+            statement.setInt(2, deliveryArea.getDeliveryAreaZip());
+            statement.setInt(3, deliveryArea.getDeliveryAreaID());
 
             rowUpdated = statement.executeUpdate() > 0;
         }
         return rowUpdated;
     }
 
-    private void printSQLException(SQLException ex) {
-        for (Throwable e: ex) {
-            if (e instanceof SQLException) {
-                e.printStackTrace(System.err);
-                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
-                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
-                System.err.println("Message: " + e.getMessage());
-                Throwable t = ex.getCause();
-                while (t != null) {
-                    System.out.println("Cause: " + t);
-                    t = t.getCause();
-                }
-            }
-        }
-    }
 }

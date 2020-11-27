@@ -46,19 +46,37 @@
                         </caption>
 
                         <c:if test="${employee != null}">
-                            <input type="hidden" name="id" value="<c:out value='${employee.id}' />" />
+                            <input type="hidden" name="id" value="<c:out value='${employee.employeeID}' />" />
                         </c:if>
 
                         <fieldset class="form-group">
-                            <label>Employee Name</label> <input type="text" value="<c:out value='${employee.name}' />" class="form-control" name="name" required="required">
+                            <label>First Name</label> <input type="text" value="<c:out value='${employee.employeeFirstName}' />" class="form-control" name="employeeFirstName" required="required">
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>Employee Email</label> <input type="text" value="<c:out value='${employee.email}' />" class="form-control" name="email">
+                            <label>Last Name</label> <input type="text" value="<c:out value='${employee.employeeLastName}' />" class="form-control" name="employeeLastName">
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>Employee Country</label> <input type="text" value="<c:out value='${employee.country}' />" class="form-control" name="country">
+                            <label>Street 1</label> <input type="text" value="<c:out value='${employee.employeeStreet1}' />" class="form-control" name="employeeStreet1">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>Street 2</label> <input type="text" value="<c:out value='${employee.employeeStreet2}' />" class="form-control" name="employeeStreet2" required="required">
+                        </fieldset>
+
+                        <fieldset class="form-group">
+                            <label>City</label> <input type="text" value="<c:out value='${employee.employeeCity}' />" class="form-control" name="employeeCity">
+                        </fieldset>
+
+                        <fieldset class="form-group">
+                            <label>State</label> <input type="text" value="<c:out value='${employee.employeeState}' />" class="form-control" name="employeeState">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label>Zip</label> <input type="text" value="<c:out value='${employee.employeeZip}' />" class="form-control" name="employeeZip" required="required">
+                        </fieldset>
+
+                        <fieldset class="form-group">
+                            <label>Phone</label> <input type="text" value="<c:out value='${employee.employeePhone}' />" class="form-control" name="employeePhone">
                         </fieldset>
 
                         <button type="submit" class="btn btn-success">Save</button>

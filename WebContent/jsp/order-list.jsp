@@ -25,13 +25,17 @@
      New Order</a>
                     </div>
                     <br>
-                    <table class="table table-bordered">
+                    <table class="table table-bordered" width=90%>
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Country</th>
+                                <th>Order ID</th>
+                                <th>EmployeeID</th>
+                                <th>Delivery Person ID</th>
+                                <th>Customer ID</th>
+                                <th>Order Type</th>
+                                <th>Order Total Cost</th>
+                                <th>Delivery Address ID</th>
+                                <!-- <th>Order Date Time</th> -->
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -41,18 +45,30 @@
 
                                 <tr>
                                     <td>
-                                        <c:out value="${order.id}" />
+                                        <c:out value="${order.orderID}" />
                                     </td>
                                     <td>
-                                        <c:out value="${order.name}" />
+                                        <c:out value="${order.employeeDisplay}" />
                                     </td>
                                     <td>
-                                        <c:out value="${order.email}" />
+                                        <c:out value="${order.deliveryPersonDisplay}" />
                                     </td>
                                     <td>
-                                        <c:out value="${order.country}" />
+                                        <c:out value="${order.customerDisplay}" />
                                     </td>
-                                    <td><a href="orders?action=edit&id=<c:out value='${order.id}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="orders?action=delete&id=<c:out value='${order.id}' />">Delete</a></td>
+                                    <td>
+                                        <c:out value="${order.orderType}" />
+                                    </td>
+                                    <td>
+                                        <c:out value="${order.orderTotalCost}" />
+                                    </td>
+                                    <td>
+                                        <c:out value="${order.deliveryAddressID}" />
+                                    </td>
+                                   <%--  <td>
+                                        <c:out value="${order.orderDateTime}" />
+                                    </td> --%>
+                                    <td><a href="orders?action=edit&id=<c:out value='${order.orderID}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="orders?action=view&id=<c:out value='${order.orderID}' />">View</a>&nbsp;&nbsp;&nbsp;&nbsp; <a href="orders?action=delete&id=<c:out value='${order.orderID}' />">Delete</a></td>
                                 </tr>
                             </c:forEach>
                             <!-- } -->

@@ -46,19 +46,23 @@
                         </caption>
 
                         <c:if test="${menu != null}">
-                            <input type="hidden" name="id" value="<c:out value='${menu.id}' />" />
+                            <input type="hidden" name="id" value="<c:out value='${menu.menuItemID}' />" />
                         </c:if>
 
                         <fieldset class="form-group">
-                            <label>Menu Name</label> <input type="text" value="<c:out value='${menu.name}' />" class="form-control" name="name" required="required">
+                            <label>Item Name</label> <input type="text" value="<c:out value='${menu.menuItemName}' />" class="form-control" name="menuItemName" required="required">
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>Menu Email</label> <input type="text" value="<c:out value='${menu.email}' />" class="form-control" name="email">
+                            <label>Item Description</label> <input type="text" value="<c:out value='${menu.menuItemDescription}' />" class="form-control" name="menuItemDescription">
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>Menu Country</label> <input type="text" value="<c:out value='${menu.country}' />" class="form-control" name="country">
+                            <label>Item Type</label> <input type="text" value="<c:out value='${menu.menuItemType}' />" class="form-control" name="menuItemType">
+                        </fieldset>
+
+                         <fieldset class="form-group">
+                            <label>Item Price</label> <input type="text" value="<c:out value='${menu.menuItemPrice}' />" class="form-control" name="menuItemPrice">
                         </fieldset>
 
                         <button type="submit" class="btn btn-success">Save</button>

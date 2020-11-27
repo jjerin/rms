@@ -41,10 +41,15 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Country</th>
+                                <th>EmployeeID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Street1</th>
+                                <th>Street2</th>
+                                <th>City</th>
+                                <th>State</th>
+                                <th>Zip</th>
+                                <th>Phone</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -54,18 +59,33 @@
 
                                 <tr>
                                     <td>
-                                        <c:out value="${employee.id}" />
+                                        <c:out value="${employee.employeeID}" />
                                     </td>
                                     <td>
-                                        <c:out value="${employee.name}" />
+                                        <c:out value="${employee.employeeFirstName}" />
                                     </td>
                                     <td>
-                                        <c:out value="${employee.email}" />
+                                        <c:out value="${employee.employeeLastName}" />
                                     </td>
                                     <td>
-                                        <c:out value="${employee.country}" />
+                                        <c:out value="${employee.employeeStreet1}" />
                                     </td>
-                                    <td><a href="employees?action=edit&id=<c:out value='${employee.id}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="employees?action=delete&id=<c:out value='${employee.id}' />">Delete</a></td>
+                                    <td>
+                                        <c:out value="${employee.employeeStreet2}" />
+                                    </td>
+                                    <td>
+                                        <c:out value="${employee.employeeCity}" />
+                                    </td>
+                                    <td>
+                                        <c:out value="${employee.employeeState}" />
+                                    </td>
+                                    <td>
+                                        <c:out value="${employee.employeeZip}" />
+                                    </td>
+                                    <td>
+                                        <c:out value="${employee.employeePhone}" />
+                                    </td>
+                                    <td><a href="employees?action=edit&id=<c:out value='${employee.employeeID}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="employees?action=delete&id=<c:out value='${employee.employeeID}' />">Delete</a></td>
                                 </tr>
                             </c:forEach>
                             <!-- } -->

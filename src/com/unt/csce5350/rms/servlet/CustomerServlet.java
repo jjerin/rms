@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.unt.csce5350.rms.dao.CustomerDAO;
-import com.unt.csce5350.rms.model.Customer;
+import com.unt.csce5350.rms.updated.model.Customer;
 
 
 @WebServlet("/customers")
@@ -91,23 +91,58 @@ public class CustomerServlet extends HttpServlet {
 
     private void insertCustomer(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-        Customer newCustomer = new Customer(name, email, country);
+		/*String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String country = request.getParameter("country");
+		Customer newCustomer = new Customer(name, email, country);*/
+    	
+    	String customerFirstName = request.getParameter("customerFirstName");
+    	String customerLastName = request.getParameter("customerLastName");
+    	String customerStreet1 = request.getParameter("customerStreet1");
+    	String customerStreet2 = request.getParameter("customerStreet2");
+    	String customerCity = request.getParameter("customerCity");
+    	String customerState = request.getParameter("customerState");
+    	String customerZip = request.getParameter("customerZip");
+    	String customerPhone = request.getParameter("customerPhone");
+    	String customerEmail = request.getParameter("customerEmail");
+    	int customerOrders = Integer.parseInt(request.getParameter("customerOrders"));
+    	int customerCurrentDiscount = Integer.parseInt(request.getParameter("customerCurrentDiscount"));
+    	
+
+        Customer newCustomer =  new Customer(customerCity, customerCurrentDiscount, customerEmail,
+    			customerFirstName, customerLastName, customerOrders, customerPhone,
+    			customerState, customerStreet1, customerStreet2, customerZip);
+        
         customerDAO.insertCustomer(newCustomer);
         response.sendRedirect("customers?action=list");
     }
 
     private void updateCustomer(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
+		/*int id = Integer.parseInt(request.getParameter("id"));
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String country = request.getParameter("country");*/
+    	
+    	int customerID = Integer.parseInt(request.getParameter("customerID"));
+    	String customerFirstName = request.getParameter("customerFirstName");
+    	String customerLastName = request.getParameter("customerLastName");
+    	String customerStreet1 = request.getParameter("customerStreet1");
+    	String customerStreet2 = request.getParameter("customerStreet2");
+    	String customerCity = request.getParameter("customerCity");
+    	String customerState = request.getParameter("customerState");
+    	String customerZip = request.getParameter("customerZip");
+    	String customerPhone = request.getParameter("customerPhone");
+    	String customerEmail = request.getParameter("customerEmail");
+    	int customerOrders = Integer.parseInt(request.getParameter("customerOrders"));
+    	int customerCurrentDiscount = Integer.parseInt(request.getParameter("customerCurrentDiscount"));
+    	
 
-        Customer book = new Customer(id, name, email, country);
-        customerDAO.updateCustomer(book);
+        Customer customer =  new Customer(customerID, customerCity, customerCurrentDiscount, customerEmail,
+    			customerFirstName, customerLastName, customerOrders, customerPhone,
+    			customerState, customerStreet1, customerStreet2, customerZip);
+        
+        customerDAO.updateCustomer(customer);
         response.sendRedirect("customers?action=list");
     }
 

@@ -27,10 +27,9 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Country</th>
+                                <th>Delivery Area ID</th>
+                                <th>Delivery Area Name</th>
+                                <th>Delivery Area Zip</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -40,18 +39,16 @@
 
                                 <tr>
                                     <td>
-                                        <c:out value="${deliveryArea.id}" />
+                                        <c:out value="${deliveryArea.deliveryAreaID}" />
                                     </td>
                                     <td>
-                                        <c:out value="${deliveryArea.name}" />
+                                        <c:out value="${deliveryArea.deliveryAreaName}" />
                                     </td>
                                     <td>
-                                        <c:out value="${deliveryArea.email}" />
+                                        <c:out value="${deliveryArea.deliveryAreaZip}" />
                                     </td>
-                                    <td>
-                                        <c:out value="${deliveryArea.country}" />
-                                    </td>
-                                    <td><a href="deliveryAreas?action=edit&id=<c:out value='${deliveryArea.id}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="deliveryAreas?action=delete&id=<c:out value='${deliveryArea.id}' />">Delete</a></td>
+
+                                    <td><a href="deliveryAreas?action=edit&id=<c:out value='${deliveryArea.deliveryAreaID}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="deliveryAreas?action=delete&id=<c:out value='${deliveryArea.deliveryAreaID}' />">Delete</a></td>
                                 </tr>
                             </c:forEach>
                             <!-- } -->

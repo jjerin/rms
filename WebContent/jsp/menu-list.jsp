@@ -41,10 +41,11 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Country</th>
+                                <th>Menu ID</th>
+                                <th>ItemName</th>
+                                <th>Item Description</th>
+                                <th>Item Type</th>
+                                <th>Item Price</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -54,18 +55,21 @@
 
                                 <tr>
                                     <td>
-                                        <c:out value="${menu.id}" />
+                                        <c:out value="${menu.menuItemID}" />
                                     </td>
                                     <td>
-                                        <c:out value="${menu.name}" />
+                                        <c:out value="${menu.menuItemName}" />
                                     </td>
                                     <td>
-                                        <c:out value="${menu.email}" />
+                                        <c:out value="${menu.menuItemDescription}" />
                                     </td>
                                     <td>
-                                        <c:out value="${menu.country}" />
+                                        <c:out value="${menu.menuItemType}" />
                                     </td>
-                                    <td><a href="menus?action=edit&id=<c:out value='${menu.id}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="menus?action=delete&id=<c:out value='${menu.id}' />">Delete</a></td>
+                                    <td>
+                                        <c:out value="\$${menu.menuItemPrice}" />
+                                    </td>
+                                    <td><a href="menus?action=edit&id=<c:out value='${menu.menuItemID}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="menus?action=delete&id=<c:out value='${menu.menuItemID}' />">Delete</a></td>
                                 </tr>
                             </c:forEach>
                             <!-- } -->

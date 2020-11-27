@@ -19,7 +19,7 @@ import com.unt.csce5350.rms.utils.DBConnectionUtil;
  * @author Jerin Joseph
  *
  */
-public class CustomerDAO {
+public class OrderDeliveryDAO {
 
     private static final String INSERT_CUSTOMERS_SQL = "INSERT INTO customer" + "  (CustomerFirstName,CustomerLastName,CustomerStreet1,CustomerStreet2,CustomerCity,CustomerState,CustomerZip,CustomerPhone,CustomerEmail,CustomerOrders,CustomerCurrentDiscount) VALUES " +
         " (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -29,8 +29,31 @@ public class CustomerDAO {
     private static final String DELETE_CUSTOMERS_SQL = "delete from customer where CustomerID = ?;";
     private static final String UPDATE_CUSTOMERS_SQL = "update customer set CustomerFirstName = ?,CustomerLastName = ?,CustomerStreet1 = ?,CustomerStreet2 = ?,CustomerCity = ?,CustomerState = ?,CustomerZip = ?,CustomerPhone = ?,CustomerEmail = ?,CustomerOrders = ?,CustomerCurrentDiscount = ? where CustomerID = ?;";
     private static final String SELECT_CUSTOMER_NAME_LIST = "select CustomerID,CustomerFirstName,CustomerLastName from customer";
+    private static final String SELECT_DELIVERY_ZIP_CODES = "select distinct DeliveryAreaZip from DeliveryAreaSelect;";
+    private static final String SELECT_DELIVERY_ArREA_CODES = "select distinct DeliveryAreaZip from DeliveryAreaSelect;";
 
-    public CustomerDAO() {}
+    public OrderDeliveryDAO() {}
+    
+    
+    public List<String> getDeliveryZipCodes(){
+    	List<String> deliveryZipCodes = new ArrayList<>();
+    	deliveryZipCodes.add("");
+       try (Connection connection = DBConnectionUtil.getConnection();
+
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_DELIVERY_ZIP_CODES);) {
+            System.out.println(preparedStatement);
+            ResultSet rs = preparedStatement.executeQuery();
+            
+
+            while (rs.next()) {
+                int zip = rs.getInt("DeliveryAreaZip");
+            	deliveryZipCodes.add(zip+"");
+            }
+        } catch (SQLException e) {
+        	DBConnectionUtil.printSQLException(e);
+        }
+        return deliveryZipCodes;
+    }
     
     public List<CustomerSelect> selectCustomersNameList() {
 

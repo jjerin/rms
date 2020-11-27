@@ -1,6 +1,7 @@
 package com.unt.csce5350.rms.servlet;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -11,17 +12,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.unt.csce5350.rms.dao.OrderDAO;
 import com.unt.csce5350.rms.dao.PaymentDAO;
-import com.unt.csce5350.rms.model.Payment;
+import com.unt.csce5350.rms.updated.model.Order;
+import com.unt.csce5350.rms.updated.model.Payment;
+import com.unt.csce5350.rms.utils.AppUtils;
 
 
 @WebServlet("/payments")
 public class PaymentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private PaymentDAO paymentDAO;
+    private OrderDAO orderDAO;
 
     public void init() {
         paymentDAO = new PaymentDAO();
+        orderDAO = new OrderDAO();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -56,6 +62,9 @@ public class PaymentServlet extends HttpServlet {
                 case "update":
                     updatePayment(request, response);
                     break;
+                case "orderPayment":
+                	showOrderPaymentForm(request, response);
+                    break;
                 default:
                     listPayment(request, response);
                     break;
@@ -81,20 +90,58 @@ public class PaymentServlet extends HttpServlet {
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+
+    	int id = Integer.parseInt(request.getParameter("id"));
         Payment existingPayment = paymentDAO.selectPayment(id);
         RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/payment-form.jsp");
         request.setAttribute("payment", existingPayment);
         dispatcher.forward(request, response);
 
     }
+    
+    private void showOrderPaymentForm(HttpServletRequest request, HttpServletResponse response)
+    throws SQLException, ServletException, IOException {
+        
+        int orderId = 0;
+        if(!AppUtils.isEmpty(request.getParameter("orderID"))) {
+        	orderId = Integer.parseInt(request.getParameter("orderID"));
+        	Order order = orderDAO.selectOrder(orderId);
+        	if(order!=null) {
+        		BigDecimal orderTotal = order.getOrderTotalCost();
+        		
+        		Payment payment = new Payment();
+        		payment.setPaymentTotalPaid(orderTotal);
+        		payment.setOrderID(orderId);
+        		payment.setPaymentID(0);
+        		
+                RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/payment-form.jsp");
+                request.setAttribute("payment", payment);
+                dispatcher.forward(request, response);
+                
+                return;
+
+        	}
+        }
+
+		/*int id = Integer.parseInt(request.getParameter("id"));
+		Payment existingPayment = paymentDAO.selectPayment(id);
+		RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/payment-form.jsp");
+		request.setAttribute("payment", existingPayment);
+		dispatcher.forward(request, response);*/
+
+    }
 
     private void insertPayment(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-        Payment newPayment = new Payment(name, email, country);
+        String paymentType = request.getParameter("paymentType");
+        String paymentDateStr = request.getParameter("paymentDate");
+        BigDecimal paymentTotalPaid = new BigDecimal(request.getParameter("paymentTotalPaid"));
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        
+        java.sql.Date paymentDate = new java.sql.Date(System.currentTimeMillis()); //Fix the date?  or should we?, this is current date.
+        
+        
+        Payment newPayment = new Payment(orderID, paymentDate, paymentTotalPaid, paymentType);
         paymentDAO.insertPayment(newPayment);
         response.sendRedirect("payments?action=list");
     }
@@ -102,11 +149,16 @@ public class PaymentServlet extends HttpServlet {
     private void updatePayment(HttpServletRequest request, HttpServletResponse response)
     throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
+        String paymentType = request.getParameter("paymentType");
+        String paymentDateStr = request.getParameter("paymentDate");
+        BigDecimal paymentTotalPaid = new BigDecimal(request.getParameter("paymentTotalPaid"));
+        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        
+        java.sql.Date paymentDate = new java.sql.Date(System.currentTimeMillis()); //Fix the date?  or should we?, this is current date.
+        
+        
+        Payment book = new Payment(id, orderID, paymentDate, paymentTotalPaid, paymentType);
 
-        Payment book = new Payment(id, name, email, country);
         paymentDAO.updatePayment(book);
         response.sendRedirect("payments?action=list");
     }

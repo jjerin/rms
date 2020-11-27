@@ -35,19 +35,15 @@
                         </caption>
 
                         <c:if test="${deliveryArea != null}">
-                            <input type="hidden" name="id" value="<c:out value='${deliveryArea.id}' />" />
+                            <input type="hidden" name="id" value="<c:out value='${deliveryArea.deliveryAreaID}' />" />
                         </c:if>
 
                         <fieldset class="form-group">
-                            <label>DeliveryArea Name</label> <input type="text" value="<c:out value='${deliveryArea.name}' />" class="form-control" name="name" required="required">
+                            <label>Delivery Area Name</label> <input type="text" value="<c:out value='${deliveryArea.deliveryAreaName}' />" class="form-control" name="deliveryAreaName" required="required">
                         </fieldset>
 
                         <fieldset class="form-group">
-                            <label>DeliveryArea Email</label> <input type="text" value="<c:out value='${deliveryArea.email}' />" class="form-control" name="email">
-                        </fieldset>
-
-                        <fieldset class="form-group">
-                            <label>DeliveryArea Country</label> <input type="text" value="<c:out value='${deliveryArea.country}' />" class="form-control" name="country">
+                            <label>Delivery Area Zip</label> <input type="text" value="<c:out value='${deliveryArea.deliveryAreaZip}' />" class="form-control" name="deliveryAreaZip" required="required">
                         </fieldset>
 
                         <button type="submit" class="btn btn-success">Save</button>

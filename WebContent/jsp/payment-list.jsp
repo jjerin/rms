@@ -29,9 +29,10 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Country</th>
+                                <th>Payment Type</th>
+                                <th>Date</th>
+                                <th>TotalPaid</th>
+                                <th>OrderID</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -41,18 +42,21 @@
 
                                 <tr>
                                     <td>
-                                        <c:out value="${payment.id}" />
+                                        <c:out value="${payment.paymentID}" />
                                     </td>
                                     <td>
-                                        <c:out value="${payment.name}" />
+                                        <c:out value="${payment.paymentType}" />
                                     </td>
                                     <td>
-                                        <c:out value="${payment.email}" />
+                                        <c:out value="${payment.paymentDate}" />
                                     </td>
                                     <td>
-                                        <c:out value="${payment.country}" />
+                                        <c:out value="${payment.paymentTotalPaid}" />
                                     </td>
-                                    <td><a href="payments?action=edit&id=<c:out value='${payment.id}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="payments?action=delete&id=<c:out value='${payment.id}' />">Delete</a></td>
+                                    <td>
+                                        <c:out value="${payment.orderID}" />
+                                    </td>
+                                    <td><a href="payments?action=edit&id=<c:out value='${payment.paymentID}' />">Edit</a> &nbsp;&nbsp;&nbsp;&nbsp; <a href="payments?action=delete&id=<c:out value='${payment.paymentID}' />">Delete</a></td>
                                 </tr>
                             </c:forEach>
                             <!-- } -->

@@ -23,8 +23,8 @@
 			</div>
 
 			<ul class="navbar-nav" >
-				<li><a style="color: black; font-weight: bold;" href="<%=request.getContextPath()%>/users?action=list"
-					class="nav-link">Users</a></li>&nbsp;&nbsp;&nbsp;
+				<%-- <li><a style="color: black; font-weight: bold;" href="<%=request.getContextPath()%>/users?action=list"
+					class="nav-link">Users</a></li>&nbsp;&nbsp;&nbsp; --%>
 					
 				<li><a style="color: black; font-weight: bold;" href="<%=request.getContextPath()%>/customers?action=list"
 					class="nav-link">Customers</a></li>&nbsp;&nbsp;&nbsp;
@@ -34,6 +34,8 @@
 					class="nav-link">Menu</a></li>&nbsp;&nbsp;&nbsp;
 				<li><a style="color: black; font-weight: bold;" href="<%=request.getContextPath()%>/deliveryAreas?action=list"
 					class="nav-link">DeliveryArea</a></li>&nbsp;&nbsp;&nbsp;
+				<li><a style="color: black; font-weight: bold;" href="<%=request.getContextPath()%>/deliveryPersons?action=list"
+					class="nav-link">DeliveryPerson</a></li>&nbsp;&nbsp;&nbsp;
 				<li><a style="color: black; font-weight: bold;" href="<%=request.getContextPath()%>/payments?action=list"
 					class="nav-link">Payment</a></li>&nbsp;&nbsp;&nbsp;
 				<li><a style="color: black; font-weight: bold;" href="<%=request.getContextPath()%>/orders?action=list"
